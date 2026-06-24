@@ -290,6 +290,13 @@ textarea.fi{resize:vertical;min-height:56px}
         <a id="routeGm" href="#" target="_blank" class="route-gm">🌍 Google</a>
       </div>
     </div>
+    <div style="padding:10px 12px;border-top:1px solid #f0ece4;display:flex;gap:8px">
+      <button id="sidebarProfileBtn" style="flex:1;background:#f5f3ee;border:none;border-radius:10px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit;color:#555;display:flex;align-items:center;justify-content:center;gap:6px">
+        <div class="user-btn-avatar" id="sidebarAvatar" style="width:22px;height:22px;font-size:10px">П</div>
+        <span id="sidebarUserName">Профиль</span>
+      </button>
+      <button id="sidebarChangeCodeBtn" style="background:#fff0e8;border:none;border-radius:10px;padding:9px 12px;font-size:12px;cursor:pointer;font-family:inherit;color:#c0570a;white-space:nowrap">🔑 Сменить код</button>
+    </div>
   </div>
 </div>
 
@@ -524,8 +531,8 @@ function showUserInfo(user){
   document.getElementById('authAvatar').textContent=i;
   document.getElementById('userNameLabel').textContent=(user.displayName||'').split(' ')[0];
   document.getElementById('userAvatar').textContent=i;
-  document.getElementById('userAvatarMobile').textContent=i;
-  document.getElementById('userNameMobile').textContent=(user.displayName||'').split(' ')[0];
+  if(document.getElementById('sidebarAvatar'))document.getElementById('sidebarAvatar').textContent=i;
+  if(document.getElementById('sidebarUserName'))document.getElementById('sidebarUserName').textContent=(user.displayName||'').split(' ')[0];
 }
 document.getElementById('userBtnMobile').addEventListener('click',showUserMenu);
 document.getElementById('googleSignInBtn').addEventListener('click',()=>{
@@ -545,6 +552,8 @@ function enterMap(code){
 document.getElementById('userBtn').addEventListener('click',()=>{
   showUserMenu();
 });
+document.getElementById('sidebarProfileBtn').addEventListener('click',()=>showUserMenu());
+document.getElementById('sidebarChangeCodeBtn').addEventListener('click',()=>{closeSidebar();changeMapCode()});
 
 function showUserMenu(){
   const existing=document.getElementById('userMenu');
