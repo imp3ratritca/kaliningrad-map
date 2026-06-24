@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>📍 Калининград — наше путешествие</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -15,7 +11,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f6f0;color:#2a2420;height:100vh;overflow:hidden}
 
-/* AUTH SCREEN */
+/* AUTH */
 .auth-screen{position:fixed;inset:0;z-index:9000;background:#f8f6f0;display:flex;align-items:center;justify-content:center}
 .auth-screen.hide{display:none}
 .auth-card{background:#fff;border-radius:20px;padding:36px 32px;width:340px;max-width:calc(100vw - 32px);box-shadow:0 4px 32px rgba(0,0,0,.1);text-align:center}
@@ -34,27 +30,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .auth-code-btn:hover{background:#a84a08}
 .auth-error{font-size:12px;color:#e24b4a;margin-top:8px;min-height:18px}
 .auth-user-info{display:flex;align-items:center;gap:10px;background:#f5f3ee;border-radius:10px;padding:10px 12px;margin-bottom:20px;text-align:left}
-.auth-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover}
 .auth-avatar-placeholder{width:36px;height:36px;border-radius:50%;background:#c0570a;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;flex-shrink:0}
 .auth-user-name{font-size:13px;font-weight:500}
 .auth-user-email{font-size:11px;color:#aaa}
 
+/* HEADER */
 header{background:#fff;border-bottom:1px solid #e8e4dc;padding:11px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:1000;height:52px}
 .logo{font-size:15px;font-weight:600;white-space:nowrap}.logo span{color:#c0570a}
-
-.float-search{display:none;position:absolute;top:12px;left:12px;right:46px;z-index:500;pointer-events:none}
-.float-search input{pointer-events:all;width:100%;border:1px solid #ddd;border-radius:22px;padding:9px 14px 9px 36px;font-size:14px;font-family:inherit;outline:none;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.13);transition:all .15s}
-.float-search input:focus{border-color:#c0570a;box-shadow:0 2px 16px rgba(192,87,10,.15)}
-.float-search .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}
-.float-search .sr{top:calc(100% + 6px);pointer-events:all}
-
-@media(max-width:680px){
-  header{display:none}
-  .layout{height:100vh}
-  .float-search{display:block}
-  .hbtn-hide-mobile{display:none!important}
-  .map-add-btn{display:flex!important}
-}
 .search-wrap{flex:1;position:relative}
 .search-wrap input{width:100%;border:1px solid #e0dbd4;border-radius:20px;padding:7px 14px 7px 34px;font-size:13px;font-family:inherit;outline:none;background:#f8f6f0;transition:all .15s}
 .search-wrap input:focus{background:#fff;border-color:#c0570a;box-shadow:0 0 0 3px rgba(192,87,10,.08)}
@@ -74,21 +56,50 @@ header{background:#fff;border-bottom:1px solid #e8e4dc;padding:11px 14px;display
 .hbtn-primary:hover{background:#a84a08}
 .user-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:4px 8px;border-radius:20px;transition:background .15s;font-family:inherit}
 .user-btn:hover{background:#f5f3ee}
-.user-btn img{width:28px;height:28px;border-radius:50%}
 .user-btn-avatar{width:28px;height:28px;border-radius:50%;background:#c0570a;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:12px;flex-shrink:0}
 .user-btn span{font-size:12px;color:#666;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.layout{display:flex;height:calc(100vh - 52px);position:relative}
-#map{flex:1;z-index:1;position:relative}
-.my-loc-btn{position:absolute;bottom:24px;left:14px;z-index:500;background:#fff;border:1px solid #ddd;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.12);transition:all .15s}
-.my-loc-btn:hover{background:#f5f3ee;transform:scale(1.05)}
-.my-loc-btn.active{background:#e6f1fb;border-color:#1a6bb5}
+/* FLOAT SEARCH MOBILE */
+.float-search{display:none;position:absolute;top:12px;left:12px;right:46px;z-index:500;pointer-events:none}
+.float-search input{pointer-events:all;width:100%;border:1px solid #ddd;border-radius:22px;padding:9px 14px 9px 36px;font-size:14px;font-family:inherit;outline:none;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.13);transition:all .15s}
+.float-search input:focus{border-color:#c0570a}
+.float-search .fsi{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}
+.float-search .sr{top:calc(100% + 6px);pointer-events:all}
+@media(max-width:680px){
+  header{display:none}
+  .layout{height:100vh!important}
+  .float-search{display:block}
+  .hbtn-hide-mobile{display:none!important}
+  .map-add-btn{display:flex!important}
+}
 
+/* LAYOUT */
+.layout{display:flex;height:calc(100vh - 52px);position:relative}
+#map{flex:1;position:relative}
+
+/* MAP BUTTONS */
+.map-fab{position:absolute;z-index:500;background:#fff;border:1px solid #ddd;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.12);transition:all .15s;font-family:inherit}
+.map-fab:hover{background:#f5f3ee;transform:scale(1.05)}
+.map-fab.active{background:#e6f1fb;border-color:#1a6bb5}
+.map-add-btn{display:none;position:absolute;bottom:80px;right:14px;z-index:500;background:#c0570a;border:none;border-radius:50%;width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer;font-size:22px;box-shadow:0 2px 12px rgba(192,87,10,.4);color:#fff}
+
+/* SYNC */
 .sync-indicator{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,255,255,.95);border:1px solid #e8e4dc;border-radius:20px;padding:5px 14px;font-size:12px;color:#888;display:none;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .sync-indicator.show{display:flex}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:#3b6d11;animation:pulse 1.5s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* CONFIRM BANNER */
+.confirm-banner{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:500;background:#fff;border:1px solid #e8e4dc;border-radius:14px;padding:12px 16px;box-shadow:0 4px 20px rgba(0,0,0,.12);display:none;align-items:center;gap:12px;min-width:260px;max-width:calc(100vw - 80px)}
+.confirm-banner.show{display:flex}
+.confirm-banner-name{font-size:13px;font-weight:500;color:#2a2420;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.confirm-banner-btns{display:flex;gap:6px;flex-shrink:0}
+.confirm-yes{background:#c0570a;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500}
+.confirm-yes:hover{background:#a84a08}
+.confirm-no{background:#f5f3ee;color:#555;border:none;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+.confirm-no:hover{background:#e8e4dc}
+
+/* SIDEBAR */
 .sidebar{width:285px;background:#fff;border-left:1px solid #e8e4dc;display:flex;flex-direction:column;overflow:hidden;transition:transform .3s cubic-bezier(.4,0,.2,1)}
 .sidebar-tab{display:none;position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:600;background:#fff;border:1px solid #ddd;border-right:none;border-radius:10px 0 0 10px;width:26px;height:64px;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#888;box-shadow:-2px 0 10px rgba(0,0,0,.12)}
 .sidebar-close{display:none;background:none;border:none;font-size:18px;color:#bbb;cursor:pointer;padding:2px 4px;line-height:1;margin-left:auto;flex-shrink:0}
@@ -114,31 +125,33 @@ header{background:#fff;border-bottom:1px solid #e8e4dc;padding:11px 14px;display
 .card-note{font-size:11px;color:#888;margin-top:3px;line-height:1.4}
 .card-reel{font-size:11px;color:#c0570a;margin-top:3px;display:inline-flex;align-items:center;gap:3px;text-decoration:none;background:#fff0e8;padding:2px 7px;border-radius:8px}
 .card-actions{display:flex;gap:5px;margin-top:7px}
-.card-btn{background:#f5f3ee;border:none;border-radius:8px;padding:4px 9px;font-size:11px;cursor:pointer;color:#555;font-family:inherit;transition:background .15s;display:flex;align-items:center;gap:3px}
+.card-btn{background:#f5f3ee;border:none;border-radius:8px;padding:4px 9px;font-size:11px;cursor:pointer;color:#555;font-family:inherit;transition:background .15s}
 .card-btn:hover{background:#e8e4dc}
-.card-btn.nav{background:#e6f1fb;color:#1a6bb5}.card-btn.nav:hover{background:#d0e5f7}
-.card-btn.route{background:#fef0e7;color:#c0570a}.card-btn.route:hover{background:#fde0cc}
+.card-btn.nav{background:#e6f1fb;color:#1a6bb5}
+.card-btn.route{background:#fef0e7;color:#c0570a}
 .card-del{background:none;border:none;cursor:pointer;color:#ccc;font-size:13px;padding:0;line-height:1;flex-shrink:0}
 .card-del:hover{color:#e24b4a}
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:180px;color:#aaa;font-size:13px;gap:7px;text-align:center;padding:0 14px}
 
+/* ROUTE PANEL */
 .route-panel{background:#fffaf7;border-top:1px solid #fde0cc;padding:10px 12px;display:none}
 .route-panel.show{display:block}
 .route-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .route-title{font-size:12px;font-weight:600;color:#c0570a}
-.route-clear{background:none;border:none;cursor:pointer;font-size:12px;color:#aaa;font-family:inherit}.route-clear:hover{color:#e24b4a}
+.route-clear{background:none;border:none;cursor:pointer;font-size:12px;color:#aaa;font-family:inherit}
 .route-info{font-size:12px;color:#666}
 .route-open{display:flex;gap:5px;margin-top:8px}
-.route-open a{flex:1;text-align:center;padding:6px;border-radius:8px;font-size:12px;text-decoration:none;font-weight:500;transition:background .15s}
-.route-ya{background:#ffdb4d;color:#333}.route-ya:hover{background:#f5d040}
-.route-gm{background:#e8f5e9;color:#2e7d32}.route-gm:hover{background:#d4edda}
+.route-open a{flex:1;text-align:center;padding:6px;border-radius:8px;font-size:12px;text-decoration:none;font-weight:500}
+.route-ya{background:#ffdb4d;color:#333}
+.route-gm{background:#e8f5e9;color:#2e7d32}
 
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.4);align-items:center;justify-content:center}
 .modal-overlay.show{display:flex}
 .modal{background:#fff;border-radius:18px;width:390px;max-width:calc(100vw - 24px);max-height:92vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.15)}
 .modal-header{padding:18px 20px 0;display:flex;align-items:center;justify-content:space-between}
 .modal-header h3{font-size:16px;font-weight:600}
-.mclose{background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1;padding:0}.mclose:hover{color:#555}
+.mclose{background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1;padding:0}
 .modal-body{padding:14px 20px 18px}
 .fg{margin-bottom:12px}
 .fl{display:block;font-size:11px;font-weight:600;color:#888;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
@@ -148,75 +161,56 @@ textarea.fi{resize:vertical;min-height:56px}
 .cat-sel{display:flex;flex-wrap:wrap;gap:4px}
 .cat-btn{padding:5px 10px;border-radius:12px;font-size:12px;cursor:pointer;border:1.5px solid transparent;background:#f5f3ee;color:#555;font-family:inherit;transition:all .15s}
 .cat-btn.selected{border-color:currentColor}
-.reel-wrap{border:1px solid #e0dbd4;border-radius:9px;overflow:hidden;transition:border-color .15s}
-.reel-wrap:focus-within{border-color:#c0570a;box-shadow:0 0 0 3px rgba(192,87,10,.06)}
+.reel-wrap{border:1px solid #e0dbd4;border-radius:9px;overflow:hidden}
 .reel-top{display:flex}
 .reel-top input{flex:1;border:none;padding:8px 12px;font-size:13px;font-family:inherit;outline:none;background:transparent;color:#2a2420;min-width:0}
-.reel-fbtn{background:none;border:none;border-left:1px solid #e8e4dc;padding:8px 12px;font-size:12px;color:#c0570a;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s}
-.reel-fbtn:hover{background:#fff0e8}.reel-fbtn:disabled{color:#ccc;cursor:default}
+.reel-fbtn{background:none;border:none;border-left:1px solid #e8e4dc;padding:8px 12px;font-size:12px;color:#c0570a;cursor:pointer;font-family:inherit;white-space:nowrap}
+.reel-fbtn:disabled{color:#ccc;cursor:default}
 .reel-prev{display:none;border-top:1px solid #f0ece4;padding:9px 12px;align-items:center;gap:9px;background:#fafaf8}
 .reel-prev.show{display:flex}
-.reel-tp{width:48px;height:48px;border-radius:7px;object-fit:cover;flex-shrink:0}
 .reel-tpp{width:48px;height:48px;border-radius:7px;background:#f0ece4;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.reel-tp{width:48px;height:48px;border-radius:7px;object-fit:cover;flex-shrink:0}
 .reel-ri{flex:1;min-width:0}
 .reel-rt{font-size:12px;font-weight:500;color:#2a2420;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .reel-rp{font-size:11px;color:#aaa;margin-top:2px}
-.reel-rx{background:none;border:none;cursor:pointer;color:#ccc;font-size:14px;padding:0;flex-shrink:0}.reel-rx:hover{color:#e24b4a}
-.photo-upload-area{width:100%;height:120px;border:1.5px dashed #ddd;border-radius:10px;cursor:pointer;overflow:hidden;position:relative;transition:border-color .15s;display:flex;align-items:center;justify-content:center;background:#fafaf8}
+.reel-rx{background:none;border:none;cursor:pointer;color:#ccc;font-size:14px;padding:0;flex-shrink:0}
+.photo-upload-area{width:100%;height:120px;border:1.5px dashed #ddd;border-radius:10px;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fafaf8;transition:border-color .15s}
 .photo-upload-area:hover{border-color:#c0570a;background:#fff8f5}
-.photo-upload-area .pt{width:100%;height:100%;object-fit:cover;display:none;border-radius:9px}
-.photo-upload-area .pt.show{display:block}
-.photo-upload-area .ptp{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%}
-.photo-upload-area .ptp.hide{display:none}
-.photo-clear-btn{margin-top:6px;background:none;border:none;font-size:12px;color:#aaa;cursor:pointer;font-family:inherit;padding:2px 0}
+.photo-upload-area img{width:100%;height:100%;object-fit:cover;display:none;border-radius:9px}
+.photo-upload-area img.show{display:block}
+.photo-ptp{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%}
+.photo-ptp.hide{display:none}
+.photo-clear-btn{margin-top:6px;background:none;border:none;font-size:12px;color:#aaa;cursor:pointer;font-family:inherit;padding:2px 0;display:none}
 .photo-clear-btn:hover{color:#e24b4a}
-.pt{width:100%;height:100%;object-fit:cover;flex-shrink:0;border:none;display:none;border-radius:9px}
-.pt.show{display:block}
-.ptp{display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
-.ptp.hide{display:none}
 .coord-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#888;background:#f5f3ee;padding:3px 9px;border-radius:8px;margin-bottom:12px}
 .modal-footer{display:flex;gap:8px;padding:0 20px 18px}
 .modal-footer .hbtn{flex:1;justify-content:center}
 
-.leaflet-routing-container{display:none}
-
-/* CONFIRM BANNER */
-.confirm-banner{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:500;background:#fff;border:1px solid #e8e4dc;border-radius:14px;padding:12px 16px;box-shadow:0 4px 20px rgba(0,0,0,.12);display:none;align-items:center;gap:12px;min-width:260px;max-width:calc(100vw - 80px)}
-.confirm-banner.show{display:flex}
-.confirm-banner-name{font-size:13px;font-weight:500;color:#2a2420;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.confirm-banner-btns{display:flex;gap:6px;flex-shrink:0}
-.confirm-yes{background:#c0570a;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500}
-.confirm-yes:hover{background:#a84a08}
-.confirm-no{background:#f5f3ee;color:#555;border:none;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit}
-.confirm-no:hover{background:#e8e4dc}
-.leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
-.pop{min-width:155px;max-width:210px}
-.pop img{width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:7px}
-.pop-name{font-weight:600;font-size:13px;margin-bottom:2px}
-.pop-cat{font-size:11px;opacity:.65}
-.pop-note{font-size:11px;color:#666;margin-top:4px;line-height:1.4}
-.pop-reel{font-size:11px;color:#c0570a;margin-top:5px;text-decoration:none;display:inline-flex;align-items:center;gap:3px;background:#fff0e8;padding:2px 7px;border-radius:6px}
-.pop-btns{display:flex;gap:6px;margin-top:7px}
-.pop-route{flex:1;padding:5px 8px;background:#fef0e7;color:#c0570a;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;text-align:center;font-weight:500}
-.pop-route:hover{background:#fde0cc}
-.pop-edit{flex:1;padding:5px 8px;background:#f5f3ee;color:#555;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;text-align:center;font-weight:500}
-.pop-edit:hover{background:#e8e4dc}
+/* YANDEX POPUP */
+.ya-popup{min-width:160px;max-width:220px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.ya-popup img{width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block}
+.ya-popup-name{font-weight:600;font-size:14px;margin-bottom:3px;color:#2a2420}
+.ya-popup-cat{font-size:11px;opacity:.65;margin-bottom:4px}
+.ya-popup-note{font-size:12px;color:#666;line-height:1.4;margin-bottom:6px}
+.ya-popup-reel{font-size:11px;color:#c0570a;text-decoration:none;display:inline-flex;align-items:center;gap:3px;background:#fff0e8;padding:2px 7px;border-radius:6px;margin-bottom:6px}
+.ya-popup-btns{display:flex;gap:6px}
+.ya-popup-btn{flex:1;padding:6px 8px;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;text-align:center}
+.ya-popup-route{background:#fef0e7;color:#c0570a}
+.ya-popup-edit{background:#f5f3ee;color:#555}
 </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">📍</div>
     <div class="auth-title">Калининград</div>
     <div class="auth-sub">Наша карта путешествия.<br>Войди чтобы синхронизировать места.</div>
-
     <button class="auth-google-btn" id="googleSignInBtn">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" />
       Войти через Google
     </button>
-
     <div id="authUserInfo" style="display:none">
       <div class="auth-user-info">
         <div class="auth-avatar-placeholder" id="authAvatar">П</div>
@@ -241,7 +235,7 @@ textarea.fi{resize:vertical;min-height:56px}
     <input type="text" id="searchInput" placeholder="Найти место..." autocomplete="off" />
     <div class="sr" id="searchResults"></div>
   </div>
-  <button class="hbtn hbtn-hide-mobile" id="locBtn">📍 <span>Я здесь</span></button>
+  <button class="hbtn hbtn-hide-mobile" id="locBtn">📍 Я здесь</button>
   <button class="hbtn hbtn-primary hbtn-hide-mobile" id="addBtn">+ Добавить</button>
   <button class="user-btn hbtn-hide-mobile" id="userBtn">
     <div class="user-btn-avatar" id="userAvatar">П</div>
@@ -252,12 +246,12 @@ textarea.fi{resize:vertical;min-height:56px}
 <div class="layout">
   <div id="map">
     <div class="float-search">
-      <span class="si">🔍</span>
+      <span class="fsi">🔍</span>
       <input type="text" id="searchInputMobile" placeholder="Найти место..." autocomplete="off" />
       <div class="sr" id="searchResultsMobile"></div>
     </div>
-    <button class="my-loc-btn" id="locBtnMap">🎯</button>
-    <button class="map-add-btn" id="mapAddBtn" style="display:none;position:absolute;bottom:80px;right:14px;z-index:500;background:#c0570a;border:none;border-radius:50%;width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer;font-size:22px;box-shadow:0 2px 12px rgba(192,87,10,.4)">+</button>
+    <button class="map-fab" id="locBtnMap" style="bottom:24px;left:14px">🎯</button>
+    <button class="map-add-btn" id="mapAddBtn">+</button>
     <div class="sync-indicator" id="syncIndicator">
       <div class="sync-dot"></div>
       <span id="syncText">Синхронизация...</span>
@@ -316,14 +310,14 @@ textarea.fi{resize:vertical;min-height:56px}
       <div class="fg">
         <label class="fl">📸 Фото</label>
         <div class="photo-upload-area" id="photoUploadArea">
-          <img class="pt" id="photoThumb" src="" />
-          <div class="ptp" id="photoPlaceholder">
+          <img id="photoThumb" src="" />
+          <div class="photo-ptp" id="photoPlaceholder">
             <div style="font-size:28px;margin-bottom:4px">🖼️</div>
             <div style="font-size:12px;color:#aaa">Нажми чтобы выбрать фото</div>
           </div>
         </div>
         <input type="file" id="photoFile" accept="image/*" style="display:none" />
-        <button type="button" class="photo-clear-btn" id="photoClearBtn" style="display:none">✕ Удалить фото</button>
+        <button type="button" class="photo-clear-btn" id="photoClearBtn">✕ Удалить фото</button>
       </div>
       <div class="fg">
         <label class="fl">🎬 Ссылка на рилс / шортс</label>
@@ -354,22 +348,20 @@ textarea.fi{resize:vertical;min-height:56px}
 
 <script>
 // ─── FIREBASE ───────────────────────────────────────────
-const firebaseConfig = {
-  apiKey: "AIzaSyBDJAwNPVvSpib_G_Jxj8WmRYPQLHo1TpU",
-  authDomain: "kaliningrad-map.firebaseapp.com",
-  databaseURL: "https://kaliningrad-map-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "kaliningrad-map",
-  storageBucket: "kaliningrad-map.firebasestorage.app",
-  messagingSenderId: "538260532893",
-  appId: "1:538260532893:web:6cfecdd78285135491ee74"
+const firebaseConfig={
+  apiKey:"AIzaSyBDJAwNPVvSpib_G_Jxj8WmRYPQLHo1TpU",
+  authDomain:"kaliningrad-map.firebaseapp.com",
+  databaseURL:"https://kaliningrad-map-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"kaliningrad-map",
+  storageBucket:"kaliningrad-map.firebasestorage.app",
+  messagingSenderId:"538260532893",
+  appId:"1:538260532893:web:6cfecdd78285135491ee74"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
+const auth=firebase.auth();
+const db=firebase.database();
 
-let currentUser = null;
-let mapCode = null; // shared map identifier
-let dbRef = null;   // firebase ref for current map
+let currentUser=null,mapCode=null,dbRef=null;
 
 // ─── CATEGORIES ─────────────────────────────────────────
 const CATS=[
@@ -380,37 +372,97 @@ const CATS=[
   {id:'fun',label:'🎉 Досуг',color:'#b5690a',bg:'#faeeda'},
   {id:'stay',label:'🏨 Жильё',color:'#0f6e56',bg:'#e1f5ee'},
 ];
-
-let places=[];
-let markers={};
-let pendingLatLng=null;
-let editPlaceId=null;
-let currentPhotoData='';
-let filterCat='all';
-let searchTimer=null;
-let myLat=null,myLng=null;
-let myMarker=null,myCircle=null;
-let routeControl=null,routingPlace=null;
-let watchId=null;
-let suppressMapClick=false;
-let previewMarker=null;
-let previewLatLng=null;
-let previewName='';
-
-// ─── MAP ────────────────────────────────────────────────
-const map=L.map('map',{zoomControl:false}).setView([54.7104,20.5104],13);
-L.control.zoom({position:'topleft'}).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-  attribution:'© OpenStreetMap © CARTO',maxZoom:19
-}).addTo(map);
-
 function catInfo(id){return CATS.find(c=>c.id===id)||{label:'📌',color:'#888',bg:'#f5f5f5'}}
-function makeIcon(cat){
-  const c=catInfo(cat),e=c.label.split(' ')[0];
-  return L.divIcon({html:`<div style="width:36px;height:36px;border-radius:50%;background:${c.bg};border:2.5px solid ${c.color};display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.15)">${e}</div>`,iconSize:[36,36],iconAnchor:[18,18],popupAnchor:[0,-22],className:''});
+
+// ─── STATE ──────────────────────────────────────────────
+let places=[],ymapMarkers={},pendingLatLng=null,editPlaceId=null,currentPhotoData='';
+let filterCat='all',searchTimer=null;
+let myLat=null,myLng=null,myPlacemark=null,watchId=null;
+let routingPlace=null,previewPlacemark=null,previewLatLng=null,previewName='';
+let ymap=null; // Yandex map instance
+
+// ─── YANDEX MAP INIT ────────────────────────────────────
+function initYandexMap(){
+  ymaps.ready(()=>{
+    ymap=new ymaps.Map('map',{
+      center:[54.7104,20.5104],
+      zoom:13,
+      controls:['zoomControl']
+    },{
+      suppressMapOpenBlock:true
+    });
+
+    ymap.controls.get('zoomControl').options.set({size:'small',position:{left:14,top:60}});
+
+    ymap.events.add('click',e=>{
+      const coords=e.get('coords');
+      hidePreview();
+      openModal({lat:coords[0],lng:coords[1]});
+    });
+
+    // render markers if places already loaded
+    renderMarkers();
+  });
 }
-function myIcon(){
-  return L.divIcon({html:`<div style="width:18px;height:18px;border-radius:50%;background:#1a6bb5;border:3px solid #fff;box-shadow:0 0 0 2px #1a6bb5,0 2px 8px rgba(0,0,0,.2)"></div>`,iconSize:[18,18],iconAnchor:[9,9],className:''});
+
+// Load Yandex Maps API
+(function(){
+  const s=document.createElement('script');
+  s.src='https://api-maps.yandex.ru/2.1/?apikey=540ea1a7-0318-4a4a-bdd2-e6f71462ed14&lang=ru_RU';
+  s.onload=initYandexMap;
+  document.head.appendChild(s);
+})();
+
+// ─── MARKERS ────────────────────────────────────────────
+function makeYaIcon(cat){
+  const c=catInfo(cat),e=c.label.split(' ')[0];
+  return ymaps.templateLayoutFactory.createClass(
+    `<div style="width:36px;height:36px;border-radius:50%;background:${c.bg};border:2.5px solid ${c.color};display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.15);margin-left:-18px;margin-top:-18px">${e}</div>`
+  );
+}
+
+function renderMarkers(){
+  if(!ymap)return;
+  const cur=new Set(places.map(p=>p.id));
+
+  // remove deleted
+  Object.keys(ymapMarkers).forEach(id=>{
+    if(!cur.has(id)){ymap.geoObjects.remove(ymapMarkers[id]);delete ymapMarkers[id]}
+  });
+
+  // add new
+  places.forEach(p=>{
+    if(ymapMarkers[p.id])return;
+    const c=catInfo(p.cat);
+    const pm=new ymaps.Placemark([p.lat,p.lng],{},{
+      iconLayout:makeYaIcon(p.cat),
+      iconShape:{type:'Circle',coordinates:[0,0],radius:18}
+    });
+
+    pm.events.add('click',()=>{
+      const content=`<div class="ya-popup">
+        ${p.photo?`<img src="${p.photo}" onerror="this.style.display='none'" />`:''}
+        <div class="ya-popup-name">${p.name}</div>
+        <div class="ya-popup-cat" style="color:${c.color}">${c.label}</div>
+        ${p.note?`<div class="ya-popup-note">${p.note}</div>`:''}
+        ${p.reel?`<a class="ya-popup-reel" href="${p.reel}" target="_blank">🎬 Открыть рилс</a>`:''}
+        <div class="ya-popup-btns">
+          <button class="ya-popup-btn ya-popup-route" onclick="buildRouteById('${p.id}')">🗺️ Маршрут</button>
+          <button class="ya-popup-btn ya-popup-edit" onclick="editPlace('${p.id}')">✏️ Изменить</button>
+        </div>
+      </div>`;
+      pm.balloon.open();
+      pm.properties.set('balloonContent', content);
+    });
+
+    pm.properties.set('balloonContent','');
+    pm.options.set('balloonContentLayout', ymaps.templateLayoutFactory.createClass(
+      '<div class="ya-popup">$[properties.balloonContent]</div>'
+    ));
+
+    ymap.geoObjects.add(pm);
+    ymapMarkers[p.id]=pm;
+  });
 }
 
 // ─── FIREBASE SYNC ──────────────────────────────────────
@@ -420,27 +472,22 @@ function showSync(text){
   el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),2000);
 }
-
 function connectToMap(code){
   mapCode=code;
-  localStorage.setItem('klgd_map_code', code);
+  localStorage.setItem('klgd_map_code',code);
   dbRef=db.ref('maps/'+code+'/places');
-
-  // realtime listener
-  dbRef.on('value', snap=>{
+  dbRef.on('value',snap=>{
     const data=snap.val()||{};
     places=Object.entries(data).map(([id,p])=>({...p,id}));
     renderAll();
   });
 }
-
 function savePlace(place){
   if(!dbRef)return;
   showSync('Сохраняем...');
-  const {id,...data}=place;
+  const{id,...data}=place;
   dbRef.child(id).set(data);
 }
-
 function deletePlace(id){
   if(!dbRef)return;
   showSync('Удаляем...');
@@ -452,11 +499,8 @@ auth.onAuthStateChanged(user=>{
   if(user){
     currentUser=user;
     showUserInfo(user);
-    // check if already has a map code stored
-    const savedCode=localStorage.getItem('klgd_map_code');
-    if(savedCode){
-      enterMap(savedCode);
-    }
+    const saved=localStorage.getItem('klgd_map_code');
+    if(saved)enterMap(saved);
   } else {
     currentUser=null;
     document.getElementById('authScreen').classList.remove('hide');
@@ -464,44 +508,30 @@ auth.onAuthStateChanged(user=>{
     document.getElementById('googleSignInBtn').style.display='flex';
   }
 });
-
 function showUserInfo(user){
   document.getElementById('authUserInfo').style.display='block';
   document.getElementById('googleSignInBtn').style.display='none';
   document.getElementById('authUserName').textContent=user.displayName||'Пользователь';
   document.getElementById('authUserEmail').textContent=user.email||'';
-  const initial=(user.displayName||'П')[0].toUpperCase();
-  document.getElementById('authAvatar').textContent=initial;
-  // header
+  const i=(user.displayName||'П')[0].toUpperCase();
+  document.getElementById('authAvatar').textContent=i;
   document.getElementById('userNameLabel').textContent=(user.displayName||'').split(' ')[0];
-  document.getElementById('userAvatar').textContent=initial;
+  document.getElementById('userAvatar').textContent=i;
 }
-
 document.getElementById('googleSignInBtn').addEventListener('click',()=>{
-  const provider=new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(e=>console.error(e));
+  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error);
 });
-
 document.getElementById('codeSubmitBtn').addEventListener('click',()=>{
   const code=document.getElementById('codeInput').value.trim().toLowerCase().replace(/\s+/g,'-');
-  if(code.length<3){
-    document.getElementById('authError').textContent='Код слишком короткий';
-    return;
-  }
+  if(code.length<3){document.getElementById('authError').textContent='Код слишком короткий';return}
   enterMap(code);
 });
-
-document.getElementById('codeInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter')document.getElementById('codeSubmitBtn').click();
-});
-
+document.getElementById('codeInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('codeSubmitBtn').click()});
 function enterMap(code){
   document.getElementById('authError').textContent='';
   document.getElementById('authScreen').classList.add('hide');
   connectToMap(code);
 }
-
-// logout
 document.getElementById('userBtn').addEventListener('click',()=>{
   if(confirm('Выйти из аккаунта?')){
     auth.signOut();
@@ -543,19 +573,15 @@ function renderSidebar(){
       </div>
     </div>`;
   }).join('');
-
   list.querySelectorAll('.place-card').forEach(card=>{
     card.addEventListener('click',e=>{
       if(e.target.dataset.del||e.target.dataset.route||e.target.dataset.nav||e.target.classList.contains('card-reel'))return;
       const p=places.find(x=>x.id===card.dataset.id);
-      if(p&&markers[p.id]){map.setView([p.lat,p.lng],16);markers[p.id].openPopup()}
+      if(p&&ymap){ymap.setCenter([p.lat,p.lng],16);ymapMarkers[p.id]&&ymapMarkers[p.id].balloon.open()}
     });
   });
   list.querySelectorAll('[data-del]').forEach(btn=>{
-    btn.addEventListener('click',e=>{
-      e.stopPropagation();
-      deletePlace(btn.dataset.del);
-    });
+    btn.addEventListener('click',e=>{e.stopPropagation();deletePlace(btn.dataset.del)});
   });
   list.querySelectorAll('[data-route]').forEach(btn=>{
     btn.addEventListener('click',e=>{e.stopPropagation();const p=places.find(x=>x.id===btn.dataset.route);if(p)buildRoute(p)});
@@ -568,7 +594,6 @@ function renderSidebar(){
     });
   });
 }
-
 function renderFilters(){
   const cats=[...new Set(places.map(p=>p.cat))];
   const chips=document.getElementById('filterChips');
@@ -582,95 +607,95 @@ function renderFilters(){
   });
   document.getElementById('sidebarClose').addEventListener('click',closeSidebar);
 }
-
-function renderMarkers(){
-  const cur=new Set(places.map(p=>p.id));
-  Object.keys(markers).forEach(id=>{if(!cur.has(id)){map.removeLayer(markers[id]);delete markers[id]}});
-  places.forEach(p=>{
-    if(!markers[p.id]){
-      const m=L.marker([p.lat,p.lng],{icon:makeIcon(p.cat)}).addTo(map);
-      const c=catInfo(p.cat);
-      m.bindPopup(`<div class="pop">
-        ${p.photo?`<img src="${p.photo}" onerror="this.style.display='none'" />`:''}
-        <div class="pop-name">${p.name}</div>
-        <div class="pop-cat" style="color:${c.color}">${c.label}</div>
-        ${p.note?`<div class="pop-note">${p.note}</div>`:''}
-        ${p.reel?`<a class="pop-reel" href="${p.reel}" target="_blank">🎬 Открыть рилс</a>`:''}
-        <div class="pop-btns">
-          <button class="pop-route" onclick="buildRouteById('${p.id}')">🗺️ Маршрут</button>
-          <button class="pop-edit" onclick="editPlace('${p.id}')">✏️ Изменить</button>
-        </div>
-      </div>`,{maxWidth:230});
-      markers[p.id]=m;
-    }
-  });
-}
-
 function renderAll(){renderMarkers();renderFilters();renderSidebar()}
 
 // ─── GEOLOCATION ────────────────────────────────────────
 function startLocation(cb){
   if(!navigator.geolocation){alert('Геолокация недоступна');return}
   const btn=document.getElementById('locBtn');
-  btn.innerHTML='⏳ <span>Ищем...</span>';btn.disabled=true;
+  btn.textContent='⏳ Ищем...';btn.disabled=true;
   navigator.geolocation.getCurrentPosition(pos=>{
     myLat=pos.coords.latitude;myLng=pos.coords.longitude;
-    placeMyMarker(myLat,myLng,pos.coords.accuracy);
-    map.setView([myLat,myLng],15);
-    btn.innerHTML='📍 <span>Я здесь</span>';btn.disabled=false;btn.classList.add('active');
+    placeMyMark(myLat,myLng);
+    ymap&&ymap.setCenter([myLat,myLng],15);
+    btn.textContent='📍 Я здесь';btn.disabled=false;btn.classList.add('active');
     document.getElementById('locBtnMap').classList.add('active');
     if(watchId)navigator.geolocation.clearWatch(watchId);
     watchId=navigator.geolocation.watchPosition(p=>{
-      myLat=p.coords.latitude;myLng=p.coords.longitude;
-      placeMyMarker(myLat,myLng,p.coords.accuracy);
+      myLat=p.coords.latitude;myLng=p.coords.longitude;placeMyMark(myLat,myLng);
     },{enableHighAccuracy:true,timeout:10000});
     if(cb)cb();
   },err=>{
-    btn.innerHTML='📍 <span>Я здесь</span>';btn.disabled=false;
+    btn.textContent='📍 Я здесь';btn.disabled=false;
     if(err.code===1)alert('Разреши доступ к геолокации');
   },{enableHighAccuracy:true,timeout:10000});
 }
-function placeMyMarker(lat,lng,acc){
-  if(myMarker)map.removeLayer(myMarker);
-  if(myCircle)map.removeLayer(myCircle);
-  myCircle=L.circle([lat,lng],{radius:Math.min(acc||30,150),color:'#1a6bb5',fillColor:'#1a6bb5',fillOpacity:.1,weight:1}).addTo(map);
-  myMarker=L.marker([lat,lng],{icon:myIcon(),zIndexOffset:1000}).addTo(map).bindPopup('<div style="font-size:13px;font-weight:600;padding:2px 0">Вы здесь 📍</div>');
+function placeMyMark(lat,lng){
+  if(!ymap)return;
+  if(myPlacemark)ymap.geoObjects.remove(myPlacemark);
+  myPlacemark=new ymaps.Placemark([lat,lng],{balloonContent:'Вы здесь 📍'},{
+    preset:'islands#blueCircleDotIcon'
+  });
+  ymap.geoObjects.add(myPlacemark);
 }
 document.getElementById('locBtn').addEventListener('click',()=>startLocation());
-document.getElementById('locBtnMap').addEventListener('click',()=>{if(myLat)map.setView([myLat,myLng],16);else startLocation()});
+document.getElementById('locBtnMap').addEventListener('click',()=>{if(myLat&&ymap)ymap.setCenter([myLat,myLng],16);else startLocation()});
 
 // ─── ROUTING ────────────────────────────────────────────
 function buildRoute(place){
   if(!myLat){startLocation(()=>buildRoute(place));return}
-  clearRoute();routingPlace=place;
-  routeControl=L.Routing.control({
-    waypoints:[L.latLng(myLat,myLng),L.latLng(place.lat,place.lng)],
-    router:L.Routing.osrmv1({serviceUrl:'https://router.project-osrm.org/route/v1',profile:'foot'}),
-    lineOptions:{styles:[{color:'#c0570a',weight:4,opacity:.8}]},
-    createMarker:()=>null,addWaypoints:false,draggableWaypoints:false,fitSelectedRoutes:true,show:false,
-  }).addTo(map);
-  routeControl.on('routesfound',e=>{
-    const r=e.routes[0];
-    document.getElementById('routeInfo').innerHTML=`🚶 ${(r.summary.totalDistance/1000).toFixed(1)} км • ~${Math.round(r.summary.totalTime/60)} мин`;
-    document.getElementById('routeTitle').textContent=`🗺️ до: ${place.name}`;
-  });
-  routeControl.on('routingerror',()=>{document.getElementById('routeInfo').textContent='Не удалось построить маршрут'});
+  routingPlace=place;
   const dest=`${place.lat},${place.lng}`,orig=`${myLat},${myLng}`;
-  document.getElementById('routeYa').href=`https://yandex.ru/maps/?rtext=${orig}~${dest}&rtt=auto`;
+  document.getElementById('routeYa').href=`https://yandex.ru/maps/?rtext=${orig}~${dest}&rtt=pd`;
   document.getElementById('routeGm').href=`https://www.google.com/maps/dir/${orig}/${dest}`;
+  const dist=getDistKm(myLat,myLng,place.lat,place.lng);
+  const mins=Math.round(dist/5*60);
+  document.getElementById('routeInfo').innerHTML=`🚶 ~${dist.toFixed(1)} км • ~${mins} мин пешком`;
+  document.getElementById('routeTitle').textContent=`🗺️ до: ${place.name}`;
   document.getElementById('routePanel').classList.add('show');
   document.querySelectorAll('.place-card').forEach(c=>c.classList.remove('routing'));
   const card=document.querySelector(`.place-card[data-id="${place.id}"]`);
   if(card){card.classList.add('routing');card.scrollIntoView({behavior:'smooth',block:'nearest'})}
 }
+function getDistKm(lat1,lng1,lat2,lng2){
+  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
 function clearRoute(){
-  if(routeControl){map.removeControl(routeControl);routeControl=null}
   routingPlace=null;
   document.getElementById('routePanel').classList.remove('show');
   document.querySelectorAll('.place-card').forEach(c=>c.classList.remove('routing'));
 }
 document.getElementById('routeClear').addEventListener('click',clearRoute);
-window.buildRouteById=id=>{const p=places.find(x=>x.id===id);if(p){map.closePopup();buildRoute(p)}};
+window.buildRouteById=id=>{const p=places.find(x=>x.id===id);if(p){ymap&&ymap.balloon&&ymap.balloon.close();buildRoute(p)}};
+
+// ─── PREVIEW ────────────────────────────────────────────
+function showPreview(latlng,name){
+  hidePreview();
+  previewLatLng=latlng;previewName=name;
+  if(ymap){
+    previewPlacemark=new ymaps.Placemark([latlng.lat,latlng.lng],{},{
+      iconLayout:ymaps.templateLayoutFactory.createClass(
+        `<div style="width:36px;height:36px;border-radius:50%;background:#f5f3ee;border:2.5px dashed #aaa;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.12);margin-left:-18px;margin-top:-18px">📍</div>`
+      ),
+      iconShape:{type:'Circle',coordinates:[0,0],radius:18}
+    });
+    ymap.geoObjects.add(previewPlacemark);
+    ymap.setCenter([latlng.lat,latlng.lng],16);
+  }
+  document.getElementById('confirmBannerName').textContent='📍 '+name;
+  document.getElementById('confirmBanner').classList.add('show');
+}
+function hidePreview(){
+  if(previewPlacemark&&ymap){ymap.geoObjects.remove(previewPlacemark);previewPlacemark=null}
+  previewLatLng=null;previewName='';
+  document.getElementById('confirmBanner').classList.remove('show');
+}
+document.getElementById('confirmYes').addEventListener('click',()=>{
+  const ll=previewLatLng,n=previewName;hidePreview();openModal(ll,{name:n});
+});
+document.getElementById('confirmNo').addEventListener('click',hidePreview);
 
 // ─── MODAL ──────────────────────────────────────────────
 function buildCatSelector(sel){
@@ -683,22 +708,17 @@ function buildCatSelector(sel){
     });
   });
 }
-
 function openModal(latlng,prefill){
-  editPlaceId=null;
-  pendingLatLng=latlng;
+  editPlaceId=null;pendingLatLng=latlng;
   document.getElementById('placeName').value=prefill?.name||'';
   document.getElementById('placeNote').value='';
   document.getElementById('reelUrl').value='';
   document.getElementById('reelPrev').classList.remove('show');
-  currentPhotoData='';
-  document.getElementById('photoFile').value='';
-  updatePhotoThumb('');
-  buildCatSelector('food');
+  currentPhotoData='';document.getElementById('photoFile').value='';
+  updatePhotoThumb('');buildCatSelector('food');
   document.getElementById('modalTitle').textContent='Новое место';
   document.getElementById('saveBtn').textContent='Сохранить место';
-  const cb=document.getElementById('coordBadge');
-  cb.textContent=latlng?`📍 ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`:'📍 Выбери точку на карте';
+  document.getElementById('coordBadge').textContent=latlng?`📍 ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`:'📍 Выбери точку на карте';
   document.getElementById('modalOverlay').classList.add('show');
   setTimeout(()=>document.getElementById('placeName').focus(),80);
 }
@@ -706,17 +726,13 @@ function closeModal(){document.getElementById('modalOverlay').classList.remove('
 
 window.editPlace=function(id){
   const p=places.find(x=>x.id===id);if(!p)return;
-  map.closePopup();
-  editPlaceId=id;
-  pendingLatLng={lat:p.lat,lng:p.lng};
+  editPlaceId=id;pendingLatLng={lat:p.lat,lng:p.lng};
   document.getElementById('placeName').value=p.name;
   document.getElementById('placeNote').value=p.note||'';
   document.getElementById('reelUrl').value=p.reel||'';
   document.getElementById('reelPrev').classList.remove('show');
-  currentPhotoData=p.photo||'';
-  document.getElementById('photoFile').value='';
-  updatePhotoThumb(p.photo||'');
-  buildCatSelector(p.cat);
+  currentPhotoData=p.photo||'';document.getElementById('photoFile').value='';
+  updatePhotoThumb(p.photo||'');buildCatSelector(p.cat);
   document.getElementById('modalTitle').textContent='Редактировать место';
   document.getElementById('saveBtn').textContent='Сохранить изменения';
   document.getElementById('coordBadge').textContent=`📍 ${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}`;
@@ -728,7 +744,6 @@ window.editPlace=function(id){
 const photoUploadArea=document.getElementById('photoUploadArea');
 const photoFile=document.getElementById('photoFile');
 const photoClearBtn=document.getElementById('photoClearBtn');
-
 photoUploadArea.addEventListener('click',e=>{e.stopPropagation();photoFile.click()});
 photoFile.addEventListener('click',e=>e.stopPropagation());
 photoFile.addEventListener('change',e=>{
@@ -743,9 +758,8 @@ photoClearBtn.addEventListener('click',e=>{
 });
 function updatePhotoThumb(src){
   const img=document.getElementById('photoThumb'),ph=document.getElementById('photoPlaceholder');
-  const cb=document.getElementById('photoClearBtn');
-  if(src){img.src=src;img.classList.add('show');ph.classList.add('hide');cb.style.display='block'}
-  else{img.src='';img.classList.remove('show');ph.classList.remove('hide');cb.style.display='none'}
+  if(src){img.src=src;img.classList.add('show');ph.classList.add('hide');photoClearBtn.style.display='block'}
+  else{img.src='';img.classList.remove('show');ph.classList.remove('hide');photoClearBtn.style.display='none'}
 }
 
 // ─── REEL ───────────────────────────────────────────────
@@ -755,12 +769,11 @@ document.getElementById('reelFetchBtn').addEventListener('click',async()=>{
   let title='',thumb='',platform='';
   if(url.includes('instagram.com'))platform='Instagram Reels';
   else if(url.includes('youtube.com')||url.includes('youtu.be'))platform='YouTube Shorts';
-  else if(url.includes('tiktok.com'))platform='TikTok';
-  else platform='Видео';
+  else if(url.includes('tiktok.com'))platform='TikTok';else platform='Видео';
   if(url.includes('youtube.com')||url.includes('youtu.be')){
     try{const r=await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`);const d=await r.json();title=d.title||'';thumb=d.thumbnail_url||'';}catch(e){}
   }
-  if(!title){const slug=url.split('/').filter(Boolean).pop().replace(/\?.*/,'').replace(/[_-]/g,' ').trim();title=slug.length>3?slug:platform;}
+  if(!title){const s=url.split('/').filter(Boolean).pop().replace(/\?.*/,'').replace(/[_-]/g,' ').trim();title=s.length>3?s:platform;}
   document.getElementById('reelTitle').textContent=title;
   document.getElementById('reelPlatform').textContent=platform;
   const ti=document.getElementById('reelThumb'),tp=document.getElementById('reelTpp');
@@ -785,41 +798,24 @@ document.getElementById('saveBtn').addEventListener('click',()=>{
   const note=document.getElementById('placeNote').value.trim();
   const photo=currentPhotoData;
   const reel=document.getElementById('reelUrl').value.trim();
-  const ll=pendingLatLng||map.getCenter();
-
+  const ll=pendingLatLng||{lat:54.7104,lng:20.5104};
   if(editPlaceId){
     const p=places.find(x=>x.id===editPlaceId);
     if(p){
-      const updated={...p,name,cat,note,photo,reel};
-      if(markers[editPlaceId]){map.removeLayer(markers[editPlaceId]);delete markers[editPlaceId]}
-      savePlace(updated);
+      if(ymapMarkers[editPlaceId]){ymap.geoObjects.remove(ymapMarkers[editPlaceId]);delete ymapMarkers[editPlaceId]}
+      savePlace({...p,name,cat,note,photo,reel});
     }
   } else {
-    const id=Date.now().toString();
-    savePlace({id,name,cat,note,photo,reel,lat:ll.lat,lng:ll.lng});
+    savePlace({id:Date.now().toString(),name,cat,note,photo,reel,lat:ll.lat,lng:ll.lng});
   }
   closeModal();
 });
-
 document.getElementById('cancelBtn').addEventListener('click',closeModal);
 document.getElementById('modalClose').addEventListener('click',closeModal);
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target.id==='modalOverlay')closeModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-
-// ─── MAP CLICK ──────────────────────────────────────────
-map.on('click',e=>{
-  if(suppressMapClick){suppressMapClick=false;return}
-  const tag=e.originalEvent.target.tagName;
-  if(tag==='BUTTON'||tag==='INPUT'||tag==='A')return;
-  if(window.innerWidth<=680){
-    const cont=map.getContainer().getBoundingClientRect();
-    if(e.originalEvent.clientX-cont.left>cont.width-40)return;
-  }
-  hidePreview();
-  openModal(e.latlng);
-});
-document.getElementById('addBtn').addEventListener('click',()=>openModal(map.getCenter()));
-document.getElementById('mapAddBtn').addEventListener('click',()=>openModal(map.getCenter()));
+document.getElementById('addBtn').addEventListener('click',()=>openModal(ymap?{lat:ymap.getCenter()[0],lng:ymap.getCenter()[1]}:null));
+document.getElementById('mapAddBtn').addEventListener('click',()=>openModal(ymap?{lat:ymap.getCenter()[0],lng:ymap.getCenter()[1]}:null));
 
 // ─── SEARCH ─────────────────────────────────────────────
 function bindSearch(input,results){
@@ -857,10 +853,8 @@ async function doSearch(q,input,results){
     results.querySelectorAll('.sri').forEach(item=>{
       item.addEventListener('click',()=>{
         const lat=parseFloat(item.dataset.lat),lng=parseFloat(item.dataset.lng);
-        const name=item.dataset.name;
-        suppressMapClick=true;
         input.value='';results.classList.remove('show');
-        showPreview({lat,lng},name);
+        showPreview({lat,lng},item.dataset.name);
       });
     });
   }catch(e){results.innerHTML='<div class="sl">Ошибка — проверь соединение</div>'}
@@ -871,34 +865,6 @@ function osmIcon(type,cls){
   if(cls==='tourism')return'📸';if(cls==='leisure'||cls==='natural')return'🌿';
   if(cls==='shop')return'🛍️';if(['hotel','hostel','guest_house'].includes(type))return'🏨';return'📍';
 }
-
-function showPreview(latlng, name){
-  hidePreview();
-  previewLatLng=latlng;
-  previewName=name;
-  // grey preview marker
-  const icon=L.divIcon({
-    html:`<div style="width:36px;height:36px;border-radius:50%;background:#f5f3ee;border:2.5px dashed #aaa;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.12)">📍</div>`,
-    iconSize:[36,36],iconAnchor:[18,18],className:''
-  });
-  previewMarker=L.marker([latlng.lat,latlng.lng],{icon,zIndexOffset:900}).addTo(map);
-  map.setView([latlng.lat,latlng.lng],16);
-  document.getElementById('confirmBannerName').textContent='📍 '+name;
-  document.getElementById('confirmBanner').classList.add('show');
-}
-
-function hidePreview(){
-  if(previewMarker){map.removeLayer(previewMarker);previewMarker=null}
-  previewLatLng=null;previewName='';
-  document.getElementById('confirmBanner').classList.remove('show');
-}
-
-document.getElementById('confirmYes').addEventListener('click',()=>{
-  const latlng=previewLatLng,name=previewName;
-  hidePreview();
-  openModal(latlng,{name});
-});
-document.getElementById('confirmNo').addEventListener('click',hidePreview);
 
 // ─── SIDEBAR ────────────────────────────────────────────
 const sidebar=document.getElementById('sidebar');
