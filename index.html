@@ -533,16 +533,47 @@ function enterMap(code){
   connectToMap(code);
 }
 document.getElementById('userBtn').addEventListener('click',()=>{
-  if(confirm('Выйти из аккаунта?')){
-    auth.signOut();
-    localStorage.removeItem('klgd_map_code');
-    mapCode=null;dbRef=null;places=[];
-    document.getElementById('authScreen').classList.remove('hide');
-    document.getElementById('authUserInfo').style.display='none';
-    document.getElementById('googleSignInBtn').style.display='flex';
-    renderAll();
-  }
+  showUserMenu();
 });
+
+function showUserMenu(){
+  const existing=document.getElementById('userMenu');
+  if(existing){existing.remove();return}
+  const menu=document.createElement('div');
+  menu.id='userMenu';
+  menu.style.cssText='position:fixed;top:52px;right:14px;background:#fff;border:1px solid #e8e4dc;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.12);z-index:2000;min-width:180px;overflow:hidden';
+  menu.innerHTML=`
+    <div style="padding:10px 14px;border-bottom:1px solid #f0ece4;font-size:12px;color:#aaa">${currentUser?.displayName||'Профиль'}</div>
+    <button onclick="changeMapCode()" style="width:100%;padding:10px 14px;background:none;border:none;text-align:left;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px">🔑 Сменить код карты</button>
+    <button onclick="signOutUser()" style="width:100%;padding:10px 14px;background:none;border:none;text-align:left;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;color:#e24b4a">↩️ Выйти</button>
+  `;
+  document.body.appendChild(menu);
+  menu.querySelectorAll('button').forEach(b=>{b.addEventListener('mouseenter',()=>b.style.background='#f8f6f0');b.addEventListener('mouseleave',()=>b.style.background='none')});
+  setTimeout(()=>document.addEventListener('click',()=>menu.remove(),{once:true}),10);
+}
+
+window.changeMapCode=function(){
+  const m=document.getElementById('userMenu');if(m)m.remove();
+  localStorage.removeItem('klgd_map_code');
+  if(dbRef){dbRef.off();dbRef=null}
+  mapCode=null;places=[];renderAll();
+  document.getElementById('codeInput').value='';
+  document.getElementById('authError').textContent='';
+  document.getElementById('authUserInfo').style.display='block';
+  document.getElementById('googleSignInBtn').style.display='none';
+  document.getElementById('authScreen').classList.remove('hide');
+};
+window.signOutUser=function(){
+  const m=document.getElementById('userMenu');if(m)m.remove();
+  auth.signOut();
+  localStorage.removeItem('klgd_map_code');
+  if(dbRef){dbRef.off();dbRef=null}
+  mapCode=null;places=[];
+  document.getElementById('authScreen').classList.remove('hide');
+  document.getElementById('authUserInfo').style.display='none';
+  document.getElementById('googleSignInBtn').style.display='flex';
+  renderAll();
+};
 
 // ─── RENDER ─────────────────────────────────────────────
 function renderSidebar(){
