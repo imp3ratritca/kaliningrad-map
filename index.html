@@ -272,6 +272,13 @@ textarea.fi{resize:vertical;min-height:56px}
       <button class="sidebar-close" id="sidebarClose">✕</button>
     </div>
     <div class="places-list" id="placesList"></div>
+    <div style="padding:10px 12px;border-top:1px solid #f0ece4">
+      <button id="userBtnMobile" style="width:100%;background:#f5f3ee;border:none;border-radius:10px;padding:9px 14px;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;color:#555">
+        <div class="user-btn-avatar" id="userAvatarMobile">П</div>
+        <span id="userNameMobile">Профиль</span>
+        <span style="margin-left:auto;color:#bbb;font-size:11px">⚙️</span>
+      </button>
+    </div>
     <div class="route-panel" id="routePanel">
       <div class="route-header">
         <div class="route-title" id="routeTitle">🗺️ Маршрут</div>
@@ -517,7 +524,10 @@ function showUserInfo(user){
   document.getElementById('authAvatar').textContent=i;
   document.getElementById('userNameLabel').textContent=(user.displayName||'').split(' ')[0];
   document.getElementById('userAvatar').textContent=i;
+  document.getElementById('userAvatarMobile').textContent=i;
+  document.getElementById('userNameMobile').textContent=(user.displayName||'').split(' ')[0];
 }
+document.getElementById('userBtnMobile').addEventListener('click',showUserMenu);
 document.getElementById('googleSignInBtn').addEventListener('click',()=>{
   auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error);
 });
